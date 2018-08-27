@@ -1,0 +1,12 @@
+{
+  "name": "line-messager",
+  "version": "0.0.1",
+  "description": "line message api client",
+  "main": "index.js",
+  "author": "Kevin Chueh",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5"
+  }
+}
