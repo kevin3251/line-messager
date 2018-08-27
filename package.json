@@ -1,6 +1,6 @@
 {
   "name": "line-messager",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "line message api client",
   "main": "index.js",
   "author": "Kevin Chueh",

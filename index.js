@@ -14,9 +14,28 @@ const getOption = ({ method = 'POST', api, accessToken, body = {} } = {}) => ({
 class LineMessager {
     constructor(accessToken) {
         this.accessToken = accessToken
+        this.replyMessage = this.replyMessage
+        this.pushMessage = this.pushMessage
+        this.multicast = this.multicast
+        this.getContent = this.getContent
+        this.getProfile = this.getProfile
+        this.getGroupMemberIDs = this.getGroupMemberIDs
+        this.getGroupMemberProfile = this.getGroupMemberProfile
+        this.leaveGroup = this.leaveGroup
+        this.getRoomMemberIDs = this.getGroupMemberIDs
+        this.getRoomMemberProfile = this.getRoomMemberProfile
+        this.leaveRoom = this.leaveRoom
+        this.getRichMenu = this.getRichMenu
+        this.createRichMenu = this.createRichMenu
+        this.deleteRichMenu = this.deleteRichMenu
+        this.getRichMenuID = this.getRichMenuID
+        this.linkRichMenu = this.linkRichMenu
+        this.unlinkRichMenu = this.unlinkRichMenu
+        this.downloadRichMenuImg = this.downloadRichMenuImg
+        this.getRichMenuList = this.getRichMenuList
     }
 
-    async replyMessage(replyToken, messages) {
+    replyMessage(replyToken, messages) {
         messages = Array.isArray(messages) ? messages : [messages]
         let option = getOption({
             api: 'message/reply',
@@ -26,7 +45,7 @@ class LineMessager {
         return request(option)
     }
 
-    async pushMessage(to, messages) {
+    pushMessage(to, messages) {
         messages = Array.isArray(messages) ? messages : [messages]
         let option = getOption({
             api: 'message/push',
@@ -36,7 +55,8 @@ class LineMessager {
         return request(option)
     }
 
-    async multicast(to, messages) {
+    multicast(to, messages) {
+        to = Array.isArray(to) ? to : [to]
         messages = Array.isArray(messages) ? messages : [messages]
         let option = getOption({
             api: 'message/multicast',
@@ -46,7 +66,7 @@ class LineMessager {
         return request(option)
     }
 
-    async getContent(messageId) {
+    getContent(messageId) {
         let option = getOption({
             method: 'GET',
             api: `message/${messageId}/content`,
@@ -55,7 +75,7 @@ class LineMessager {
         return request(option)
     }
 
-    async getProfile(userId) {
+    getProfile(userId) {
         let option = getOption({
             method: 'GET',
             api: `profile/${userId}`,
@@ -64,7 +84,7 @@ class LineMessager {
         return request(option)
     }
 
-    async getGroupMemberIDs(groupID) {
+    getGroupMemberIDs(groupID) {
         let option = getOption({
             method: 'GET',
             api: `group/${groupID}/members/ids`,
@@ -73,7 +93,7 @@ class LineMessager {
         return request(option)
     }
 
-    async getGroupMemberProfile(groupID, userID) {
+    getGroupMemberProfile(groupID, userID) {
         let option = getOption({
             method: 'GET',
             api: `group/${groupID}/member/${userID}`,
@@ -82,7 +102,7 @@ class LineMessager {
         return request(option)
     }
 
-    async leaveGroup(groupID) {
+    leaveGroup(groupID) {
         let option = getOption({
             api: `group/${groupID}/leave`,
             accessToken: this.accessToken
@@ -90,7 +110,7 @@ class LineMessager {
         return request(option)
     }
 
-    async getRoomMemberIDs(roomID, start = '') {
+    getRoomMemberIDs(roomID, start = '') {
         let api = start ? `room/${roomID}/members/ids` : `room/${roomID}/members/ids?start=${start}`
         let option = getOption({
             method: 'GET',
@@ -100,7 +120,7 @@ class LineMessager {
         return request(option)
     }
 
-    async getRoomMemberProfile(roomID, userID) {
+    getRoomMemberProfile(roomID, userID) {
         let option = getOption({
             method: 'GET',
             api: `room/${roomID}/member/${userID}`,
@@ -109,7 +129,7 @@ class LineMessager {
         return request(option)
     }
 
-    async leaveRoom(roomID) {
+    leaveRoom(roomID) {
         let option = getOption({
             api: `room/${roomID}/leave`,
             accessToken: this.accessToken
@@ -117,7 +137,7 @@ class LineMessager {
         return request(option)
     }
 
-    async getRichMenu(richMenuID) {
+    getRichMenu(richMenuID) {
         let option = getOption({
             method: 'GET',
             api: `richmenu/${richMenuID}`,
@@ -126,7 +146,7 @@ class LineMessager {
         return request(option)
     }
 
-    async createRichMenu(body) {
+    createRichMenu(body) {
         let option = getOption({
             method: 'POST',
             api: `richmenu`,
@@ -136,7 +156,7 @@ class LineMessager {
         return request(option)
     }
 
-    async deleteRichMenu(richMenuID) {
+    deleteRichMenu(richMenuID) {
         let option = getOption({
             method: 'DELETE',
             api: `richmenu/${richMenuID}`,
@@ -145,7 +165,7 @@ class LineMessager {
         return request(option)
     }
 
-    async getRichMenuID(userID) {
+    getRichMenuID(userID) {
         let option = getOption({
             method: 'GET',
             api: `user/${userID}/richmenu`,
@@ -154,7 +174,7 @@ class LineMessager {
         return request(option)
     }
 
-    async linkRichMenu(userID, richMenuID) {
+    linkRichMenu(userID, richMenuID) {
         let option = getOption({
             api: `user/${userID}/richmenu/${richMenuID}`,
             accessToken: this.accessToken
@@ -162,7 +182,7 @@ class LineMessager {
         return request(option)
     }
 
-    async unlinkRichMenu(userID) {
+    unlinkRichMenu(userID) {
         let option = getOption({
             method: 'DELETE',
             api: `user/${userID}/richmenu`,
@@ -171,7 +191,7 @@ class LineMessager {
         return request(option)
     }
 
-    async downloadRichMenuImg(richMenuID) {
+    downloadRichMenuImg(richMenuID) {
         let option = getOption({
             method: 'GET',
             api: `richmenu/${richMenuID}/content`,
@@ -183,7 +203,7 @@ class LineMessager {
     // TODO
     // async uploadRichMenuImg(){}
 
-    async getRichMenuList() {
+    getRichMenuList() {
         let option = getOption({
             method: 'GET',
             api: `richmenu/list`,
