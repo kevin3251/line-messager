@@ -210,11 +210,11 @@ class LineMessager {
         let option = {
             method: `POST`,
             headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${this.accessToken}`,
                 'Content-Type': contentType
             },
             uri: `${BASE_API}/${api}`,
-            body: image,
+            body: image
         }
 
 
@@ -229,10 +229,10 @@ class LineMessager {
                 size += chunk.byteLength
             })
 
-            return new Promise(async resolve => {
-                image.on('end', () => {
+            return new Promise(resolve => {
+                image.on('end', async () => {
                     option.headers['Content-Length'] = size
-                    return await request(option)
+                    resolve(await request(option))
                 })
             })
         }

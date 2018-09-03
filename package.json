@@ -5,8 +5,14 @@
   "main": "index.js",
   "author": "Kevin Chueh",
   "license": "MIT",
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/mocha ./test/test.js"
+  },
   "dependencies": {
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
   }
 }
