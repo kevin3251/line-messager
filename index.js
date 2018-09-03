@@ -1,4 +1,5 @@
 const request = require('request-promise-native')
+const { Readable } = require('stream')
 const BASE_API = 'https://api.line.me/v2/bot'
 
 const getOption = ({ method = 'POST', api, accessToken, body = {} } = {}) => ({
@@ -32,6 +33,7 @@ class LineMessager {
         this.linkRichMenu = this.linkRichMenu
         this.unlinkRichMenu = this.unlinkRichMenu
         this.downloadRichMenuImg = this.downloadRichMenuImg
+        this.uploadRichMenuImg = this.uploadRichMenuImg
         this.getRichMenuList = this.getRichMenuList
     }
 
@@ -200,8 +202,41 @@ class LineMessager {
         return request(option)
     }
 
-    // TODO
-    // async uploadRichMenuImg(){}
+    uploadRichMenuImg(richMenuId, image, contentType = 'image/jpeg') {
+        if (!(Buffer.isBuffer(image) || image instanceof Readable)) {
+            throw new TypeError('image should be typeof buffer or readable stream')
+        }
+        let api = `richmenu/${richMenuId}/content`
+        let option = {
+            method: `POST`,
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': contentType
+            },
+            uri: `${BASE_API}/${api}`,
+            body: image,
+        }
+
+
+        if (Buffer.isBuffer(image)) {
+            option.headers['Content-Length'] = image.byteLength
+            return request(option)
+        }
+
+        if (image instanceof Readable) {
+            let size = 0
+            image.on('data', chunk => {
+                size += chunk.byteLength
+            })
+
+            return new Promise(async resolve => {
+                image.on('end', () => {
+                    option.headers['Content-Length'] = size
+                    return await request(option)
+                })
+            })
+        }
+    }
 
     getRichMenuList() {
         let option = getOption({
